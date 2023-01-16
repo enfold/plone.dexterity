@@ -9,6 +9,54 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.0 (2022-12-02)
+------------------
+
+Bug fixes:
+
+
+- Final release for Plone 6.0.0 (#600)
+
+
+3.0.0b2 (2022-08-30)
+--------------------
+
+Bug fixes:
+
+
+- Check code quality with fresh plone/code-quality 2.0.0.
+  [maurits+erico] (#171)
+
+
+3.0.0b1 (2022-07-14)
+--------------------
+
+Breaking changes:
+
+
+- Remove long deprecated imports and fallbacks.
+  [jensens, maurits] (#161)
+- Python 3.7+ only, drop Python 2 support.
+  [jensens, maurits] (#161)
+
+
+Bug fixes:
+
+
+- Use Bootstrap 5 classes for buttons.
+  [jensens] (#161)
+
+
+3.0.0a3 (2022-05-24)
+--------------------
+
+Bug fixes:
+
+
+- Added missing icon_expr to default actions.
+  [agitator] (#167)
+
+
 3.0.0a2 (2022-01-25)
 --------------------
 
