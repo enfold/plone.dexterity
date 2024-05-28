@@ -1,37 +1,28 @@
+from pathlib import Path
 from setuptools import find_packages
 from setuptools import setup
 
 
-version = "3.0.1.dev0"
+version = "3.0.7.dev0"
 
 
-def read(filename):
-    with open(filename) as myfile:
-        try:
-            return myfile.read()
-        except UnicodeDecodeError:
-            # Happens on one Jenkins node on Python 3.6,
-            # so maybe it happens for users too.
-            pass
-    # Opening and reading as text failed, so retry opening as bytes.
-    with open(filename, "rb") as myfile:
-        contents = myfile.read()
-        return contents.decode("utf-8")
+long_description = (
+    f"{Path('README.rst').read_text()}\n{Path('CHANGES.rst').read_text()}"
+)
 
 
 short_description = """\
 Framework for content types as filesystem code and TTW (Zope/CMF/Plone)\
 """
-long_description = read("README.rst")
-long_description += "\n"
-long_description += read("CHANGES.rst")
 
 setup(
     name="plone.dexterity",
     version=version,
     description=short_description,
     long_description=long_description,
-    # Get more strings from https://pypi.org/classifiers/
+    long_description_content_type="text/x-rst",
+    # Get more strings from
+    # https://pypi.org/classifiers/
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: Plone",
@@ -58,34 +49,27 @@ setup(
     zip_safe=False,
     python_requires=">=3.8",
     install_requires=[
-        "DateTime>=4.0.1",
+        "Products.CMFCore",
+        "Products.statusmessages",
+        "Zope",
         "plone.alterego",
+        "plone.app.uuid",
         "plone.autoform>=1.0",
+        "plone.base",
         "plone.behavior>=1.0",
         "plone.folder",
         "plone.memoize",
         "plone.rfc822",
         "plone.supermodel>=1.0",
         "plone.uuid",
-        "plone.z3cform>=0.6.0",
-        "Products.CMFCore",
-        "Products.CMFDynamicViewFTI",
-        "Products.statusmessages",
+        "z3c.form",
         "setuptools",
-        "zope.annotation",
-        "zope.browser",
-        "zope.component",
-        "zope.container",
-        "zope.dottedname",
-        "zope.globalrequest",
-        "zope.filerepresentation>=3.6.0",
-        "zope.interface",
-        "zope.lifecycleevent",
-        "zope.publisher",
-        "zope.schema",
-        "zope.security",
-        "zope.size",
-        "Zope",
     ],
-    extras_require={"test": ["plone.testing", "Products.CMFPlone"]},
+    extras_require={
+        "test": [
+            "plone.testing",
+            "plone.app.content",
+            "plone.i18n",
+        ]
+    },
 )

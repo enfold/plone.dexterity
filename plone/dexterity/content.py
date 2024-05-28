@@ -28,6 +28,7 @@ from plone.uuid.interfaces import IUUID
 from Products.CMFCore import permissions
 from Products.CMFCore.CMFCatalogAware import CMFCatalogAware
 from Products.CMFCore.interfaces import ICatalogableDublinCore
+from Products.CMFCore.interfaces import IContentish
 from Products.CMFCore.interfaces import IDublinCore
 from Products.CMFCore.interfaces import IMutableDublinCore
 from Products.CMFCore.interfaces import ITypeInformation
@@ -42,8 +43,8 @@ from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.interface.declarations import getObjectSpecification
 from zope.interface.declarations import implementedBy
-from zope.interface.declarations import Implements
 from zope.interface.declarations import ObjectSpecificationDescriptor
+from zope.interface.declarations import Provides
 from zope.interface.interface import Method
 from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.security.interfaces import IPermission
@@ -193,7 +194,7 @@ class FTIAwareSpecification(ObjectSpecificationDescriptor):
             return spec
 
         dynamically_provided.append(spec)
-        all_spec = Implements(*dynamically_provided)
+        all_spec = Provides(cls, *dynamically_provided)
         inst._v__providedBy__ = updated + (all_spec,)
 
         return all_spec
@@ -268,6 +269,13 @@ class PasteBehaviourMixin:
         # allowed content types) to also ask the FTI if construction is
         # allowed.
         super()._verifyObjectPaste(obj, validate_src)
+        if IContentish.providedBy(obj):
+            portal_type = getattr(aq_base(obj), "portal_type", None)
+            constrains = IConstrainTypes(self, None)
+            if constrains:
+                allowed_ids = [i.getId() for i in constrains.allowedContentTypes()]
+                if portal_type not in allowed_ids:
+                    raise ValueError("Disallowed subobject type: %s" % portal_type)
         if validate_src:
             portal_type = getattr(aq_base(obj), "portal_type", None)
             if portal_type:
@@ -334,9 +342,8 @@ class DexterityContent(DAVResourceMixin, PortalContent, PropertyManager, Contain
         format=_marker,
         language=_marker,
         rights=_marker,
-        **kwargs
+        **kwargs,
     ):
-
         if id is not None:
             self.id = id
         now = DateTime()
@@ -362,7 +369,7 @@ class DexterityContent(DAVResourceMixin, PortalContent, PropertyManager, Contain
         if rights is not _marker:
             self.setRights(rights)
 
-        for (k, v) in kwargs.items():
+        for k, v in kwargs.items():
             setattr(self, k, v)
 
     def __getattr__(self, name):
