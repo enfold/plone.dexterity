@@ -3,7 +3,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = "3.0.7.dev0"
+version = "3.0.6+enfold.1"
 
 
 long_description = (
