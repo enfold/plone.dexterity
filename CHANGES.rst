@@ -9,10 +9,13 @@ Changelog
 
 .. towncrier release notes start
 
-3.0.6+enfold.2 (unreleased)
----------------------------
+3.0.7 (2025-01-24)
+------------------
 
-- Nothing changed yet.
+Bug fixes:
+
+
+- Fix DeprecationWarnings. [maurits] (#4090)
 
 
 3.0.6 (2024-04-25)
@@ -544,7 +547,7 @@ Fixes:
 - Made utils/datify work with newer DateTime and pytz.  Adjust tests
   to reflect changes.  [jensens]
 
-- Fixed: duplicate aq_base without using Acquistion API resulted in an
+- Fixed: duplicate aq_base without using Acquisition API resulted in an
   AttributeError that was masqued in the calling hasattr and resulted
   in wrong conclusion.  [jensens]
 
